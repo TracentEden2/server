@@ -243,7 +243,7 @@ void CPetEntity::Die()
     CBattleEntity::Die();
     if (PMaster && PMaster->PPet == this && PMaster->objtype == TYPE_PC)
     {
-        petutils::DetachPet(PMaster);
+        petutils::DespawnOrDetachPet(PMaster);
     }
 }
 

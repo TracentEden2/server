@@ -4962,7 +4962,7 @@ namespace battleutils
         {
             if (PVictim->PPet)
             {
-                petutils::DespawnPet(PVictim);
+                petutils::DespawnOrDetachPet(PVictim);
             }
 
             static_cast<CCharEntity*>(PVictim)->ClearTrusts();

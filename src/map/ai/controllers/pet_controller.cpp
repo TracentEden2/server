@@ -42,7 +42,8 @@ void CPetController::Tick(time_point tick)
 
     if (PPet->shouldDespawn(tick))
     {
-        petutils::DespawnPet(PPet->PMaster);
+        // pass in param to indicate if pet lost charm due to charm wearing off (rather than for example leave)
+        petutils::DespawnOrDetachPet(PPet->PMaster, PPet->isCharmed && tick > PPet->charmTime);
         return;
     }
     CMobController::Tick(tick);
@@ -50,9 +51,15 @@ void CPetController::Tick(time_point tick)
 
 void CPetController::DoRoamTick(time_point tick)
 {
-    if ((PPet->PMaster == nullptr || PPet->PMaster->isDead()) && PPet->isAlive())
+    if ((PPet->PMaster == nullptr || PPet->PMaster->id == 0 || PPet->PMaster->name == "" || PPet->PMaster->isDead()) && PPet->isAlive() && PPet->objtype != TYPE_MOB)
     {
         PPet->Die();
+        return;
+    }
+
+    // if pet cannot change state (for example because pet is asleep) then just return
+    if (!PPet->PAI->CanChangeState())
+    {
         return;
     }
 

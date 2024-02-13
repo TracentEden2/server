@@ -1146,7 +1146,7 @@ int32 map_cleanup(time_point tick, CTaskMgr::CTask* PTask)
                             // uncharm pet if player d/c
                             if (PChar->PPet != nullptr && PChar->PPet->objtype == TYPE_MOB)
                             {
-                                petutils::DespawnPet(PChar);
+                                petutils::DespawnOrDetachPet(PChar);
                             }
 
                             PChar->StatusEffectContainer->SaveStatusEffects(true);

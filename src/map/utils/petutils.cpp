@@ -1224,7 +1224,7 @@ namespace petutils
         }
     }
 
-    void DetachPet(CBattleEntity* PMaster)
+    void DespawnOrDetachPet(CBattleEntity* PMaster, bool uncharmedDueToTime)
     {
         if (PMaster == nullptr)
         {
@@ -1256,9 +1256,11 @@ namespace petutils
                 PMob->PAI->Disengage();
 
                 // charm time is up, mob attacks player now
-                if (PMob->PEnmityContainer->IsWithinEnmityRange(PMob->PMaster))
+                if (PMob->PEnmityContainer->IsWithinEnmityRange(PMob->PMaster) && uncharmedDueToTime)
                 {
-                    PMob->PEnmityContainer->UpdateEnmity(PChar, 0, 0);
+                    PMob->PEnmityContainer->UpdateEnmity(PChar, 1, 1);
+                    // need to set battle target to prevent mobs from despawning if far from home
+                    PMob->SetBattleTargetID(PChar->targid);
                 }
                 else
                 {
@@ -1330,23 +1332,6 @@ namespace petutils
         PChar->pushPacket(new CCharUpdatePacket(PChar));
         PChar->pushPacket(new CCharAbilitiesPacket(PChar));
         PChar->pushPacket(new CPetSyncPacket(PChar));
-    }
-
-    void DespawnPet(CBattleEntity* PMaster)
-    {
-        if (PMaster == nullptr)
-        {
-            ShowWarning("PMaster is null.");
-            return;
-        }
-
-        if (PMaster->PPet == nullptr)
-        {
-            ShowWarning("Pet is null for %s.", PMaster->getName());
-            return;
-        }
-
-        petutils::DetachPet(PMaster);
     }
 
     int16 PerpetuationCost(uint32 id, uint8 level)

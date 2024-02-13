@@ -2193,7 +2193,7 @@ void CCharEntity::Die()
 
     if (this->PPet)
     {
-        petutils::DespawnPet(this);
+        petutils::DespawnOrDetachPet(this);
     }
 
     Die(death_duration);

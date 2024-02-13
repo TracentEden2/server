@@ -734,7 +734,7 @@ void CStatusEffectContainer::ApplyStateAlteringEffects(CStatusEffect* StatusEffe
             {
                 if (m_POwner->PPet != nullptr)
                 {
-                    petutils::DespawnPet(m_POwner);
+                    petutils::DespawnOrDetachPet(m_POwner);
                 }
             }
         }
@@ -1979,7 +1979,7 @@ void CStatusEffectContainer::TickRegen(time_point tick)
                 CPetEntity* PPet = (CPetEntity*)m_POwner->PPet;
                 if (PPet->getPetType() == PET_TYPE::AVATAR)
                 {
-                    petutils::DespawnPet(m_POwner);
+                    petutils::DespawnOrDetachPet(m_POwner);
                 }
             }
         }

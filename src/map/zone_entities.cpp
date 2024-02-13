@@ -381,7 +381,7 @@ void CZoneEntities::DecreaseZoneCounter(CCharEntity* PChar)
         charutils::BuildingCharPetAbilityTable(PChar, (CPetEntity*)PChar->PPet, 0); // blank the pet commands
         if (PChar->PPet->isCharmed)
         {
-            petutils::DespawnPet(PChar);
+            petutils::DespawnOrDetachPet(PChar);
         }
         else
         {
@@ -391,7 +391,7 @@ void CZoneEntities::DecreaseZoneCounter(CCharEntity* PChar)
                 PChar->setModifier(Mod::AVATAR_PERPETUATION, 0);
             }
         }
-        // It may have been nullptred by DespawnPet
+        // It may have been nullptred by DespawnOrDetachPet
         if (PChar->PPet != nullptr)
         {
             PChar->PPet->PAI->Disengage();

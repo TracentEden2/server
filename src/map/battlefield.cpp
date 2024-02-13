@@ -532,7 +532,7 @@ bool CBattlefield::RemoveEntity(CBaseEntity* PEntity, uint8 leavecode)
         // Release charmed pet when master leaves battlefield
         if (PChar->PPet && PChar->PPet->isCharmed)
         {
-            petutils::DetachPet(PChar);
+            petutils::DespawnOrDetachPet(PChar);
         }
 
         m_Zone->updateCharLevelRestriction(PChar);

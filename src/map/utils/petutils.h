@@ -194,8 +194,7 @@ namespace petutils
 
     void  SpawnPet(CBattleEntity* PMaster, uint32 PetID, bool spawningFromZone);
     void  SpawnMobPet(CBattleEntity* PMaster, uint32 PetID);
-    void  DetachPet(CBattleEntity* PMaster);
-    void  DespawnPet(CBattleEntity* PMaster);
+    void  DespawnOrDetachPet(CBattleEntity* PMaster, bool uncharmedDueToTime = false);
     void  AttackTarget(CBattleEntity* PMaster, CBattleEntity* PTarget);
     void  RetreatToMaster(CBattleEntity* PMaster);
     int16 PerpetuationCost(uint32 id, uint8 level);

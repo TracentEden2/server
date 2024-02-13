@@ -6287,7 +6287,7 @@ uint8 CLuaBaseEntity::levelRestriction(sol::object const& level)
                     // Charmed mobs only detach if they are above the level restriction
                     if (PChar->PPet->GetMLevel() > NewMLevel)
                     {
-                        petutils::DetachPet(PChar);
+                        petutils::DespawnOrDetachPet(PChar);
                     }
                     return PChar->m_LevelRestriction;
                 }
@@ -6325,7 +6325,7 @@ uint8 CLuaBaseEntity::levelRestriction(sol::object const& level)
                             }
 
                             PChar->pushPacket(new CMessageBasicPacket(PChar, PChar, 0, 0, MSGBASIC_AUTO_EXCEEDS_CAPACITY));
-                            petutils::DespawnPet(PChar);
+                            petutils::DespawnOrDetachPet(PChar);
                             return PChar->m_LevelRestriction;
                         }
                         petutils::CalculateAutomatonStats(PChar, PPet);
@@ -6334,7 +6334,7 @@ uint8 CLuaBaseEntity::levelRestriction(sol::object const& level)
                         petutils::CalculateLuopanStats(PChar, PPet);
                         break;
                     default:
-                        petutils::DespawnPet(PChar);
+                        petutils::DespawnOrDetachPet(PChar);
                         return PChar->m_LevelRestriction;
                 }
 
@@ -14188,7 +14188,7 @@ void CLuaBaseEntity::despawnPet()
 
     if (PBattle->PPet != nullptr)
     {
-        petutils::DespawnPet(PBattle);
+        petutils::DespawnOrDetachPet(PBattle);
     }
 }
 

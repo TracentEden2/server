@@ -806,7 +806,7 @@ uint16 CBattleEntity::RACC(uint8 skill, uint16 bonusSkill)
     return std::max(0, RACC + std::min<int16>(((100 + getMod(Mod::FOOD_RACCP) * RACC) / 100), getMod(Mod::FOOD_RACC_CAP)));
 }
 
-uint16 CBattleEntity::ACC(uint8 attackNumber, uint8 offsetAccuracy)
+uint16 CBattleEntity::ACC(uint8 attackNumber, int16 offsetAccuracy)
 {
     TracyZoneScoped;
 

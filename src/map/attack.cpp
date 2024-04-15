@@ -310,7 +310,7 @@ uint8 CAttack::GetHitRate()
     {
         if (m_attackType == PHYSICAL_ATTACK_TYPE::ZANSHIN)
         {
-            m_hitRate = battleutils::GetHitRate(m_attacker, m_victim, 0, (uint8)35);
+            m_hitRate = battleutils::GetHitRate(m_attacker, m_victim, 0, 35);
         }
         else
         {
@@ -327,7 +327,7 @@ uint8 CAttack::GetHitRate()
     {
         if (m_attackType == PHYSICAL_ATTACK_TYPE::ZANSHIN)
         {
-            m_hitRate = battleutils::GetHitRate(m_attacker, m_victim, 1, (uint8)35);
+            m_hitRate = battleutils::GetHitRate(m_attacker, m_victim, 1, 35);
         }
         else
         {

@@ -6473,7 +6473,7 @@ void SmallPacket0x0DD(map_session_data_t* const PSession, CCharEntity* const PCh
                     int32 MessageValue = 64 + (uint8)mobCheck;
 
                     // Grab mob and player stats for extra messaging
-                    uint16 charAcc = PChar->ACC(SLOT_MAIN, (uint8)0);
+                    uint16 charAcc = PChar->ACC(SLOT_MAIN, 0);
                     uint16 charAtt = PChar->ATT(SLOT_MAIN);
                     uint16 mobEva  = PTarget->EVA();
                     uint16 mobDef  = PTarget->DEF();

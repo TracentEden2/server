@@ -2063,8 +2063,67 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
     }
     battleutils::ClaimMob(PTarget, this);
     battleutils::RemoveAmmo(this, ammoConsumed);
-    // only remove detectables
-    StatusEffectContainer->DelStatusEffectsByFlag(EFFECTFLAG_DETECTABLE);
+
+    // Handle Camouflage effects
+    bool hasCamoflageAndRetain = false;
+    if (this->StatusEffectContainer->HasStatusEffect(EFFECT_CAMOUFLAGE))
+    {
+        float dist = distance(this->loc.p, PTarget->loc.p);
+        float targetMeleeRange = PTarget->GetMeleeRange();
+        if (behind(this->loc.p, PTarget->loc.p, 64))
+        {
+            bool hasCamoflageAndRetain =
+                // past specific dist it will never wear from normal RA
+                (dist >= targetMeleeRange + 0.6) ||
+                // small range [meleeRange, meleeRange+0.6) where it may or may not wear (with about 50% probability)
+                (dist >= targetMeleeRange && xirand::GetRandomNumber(2) == 0);
+            if (hasCamoflageAndRetain)
+            {
+                ShowDebug("Behind Hit with retain!");
+            }
+        }
+        else if (beside(this->loc.p, PTarget->loc.p, 64))
+        {
+            bool hasCamoflageAndRetain =
+                // past specific dist it will never wear from normal RA
+                (dist >= targetMeleeRange + 5.0) ||
+                // small range [meleeRange+3.3, meleeRange+5.0) where it may or may not wear (with 50% probability)
+                (dist >= targetMeleeRange + 3.3 && xirand::GetRandomNumber(2) == 0);
+            if (hasCamoflageAndRetain)
+            {
+                ShowDebug("Beside Hit with retain!");
+            }
+        }
+        else if (infront(this->loc.p, PTarget->loc.p, 64))
+        {
+            bool hasCamoflageAndRetain =
+                // past specific dist it will never wear from normal RA
+                (dist >= targetMeleeRange + 8.1) ||
+                // small range [meleeRange+7.1, meleeRange+8.1) where it may or may not wear with 50% probability
+                (dist >= targetMeleeRange + 7.1 && xirand::GetRandomNumber(2) == 0);
+            if (hasCamoflageAndRetain)
+            {
+                ShowDebug("Front Hit with retain!");
+            }
+        }
+
+        if (not hasCamoflageAndRetain) {
+            ShowDebug("Lost Camo!");
+        }
+    }
+
+    if (hasCamoflageAndRetain)
+    {
+        // Camouflage up and retained but all other effects must be dropped
+        StatusEffectContainer->DelStatusEffect(EFFECT_SNEAK);
+        StatusEffectContainer->DelStatusEffect(EFFECT_INVISIBLE);
+        StatusEffectContainer->DelStatusEffect(EFFECT_DEODORIZE);
+    }
+    else
+    {
+        // Camouflage not up and retained so remove all detectable status effects
+        StatusEffectContainer->DelStatusEffectsByFlag(EFFECTFLAG_DETECTABLE);
+    }
 }
 
 bool CCharEntity::IsMobOwner(CBattleEntity* PBattleTarget)

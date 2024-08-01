@@ -120,9 +120,6 @@ INSERT INTO `mob_family_mods` VALUES (36,56,-1,1); -- HP_STANDBACK: -1
 -- Avatar-Garuda
 INSERT INTO `mob_family_mods` VALUES (37,56,-1,1); -- HP_STANDBACK: -1
 
--- Avatar-Ifrit
-INSERT INTO `mob_family_mods` VALUES (38,56,-1,1); -- HP_STANDBACK: -1
-
 -- Monoceros
 INSERT INTO `mob_family_mods` VALUES (39,56,-1,1); -- HP_STANDBACK: -1
 

@@ -45,9 +45,9 @@ content.groups =
     {
         mobIds =
         {
-            { cloisterOfFlamesID.mob.IFRIT_PRIME + 3 },
-            { cloisterOfFlamesID.mob.IFRIT_PRIME + 4 },
-            { cloisterOfFlamesID.mob.IFRIT_PRIME + 5 },
+            { cloisterOfFlamesID.mob.IFRIT_PRIME_TSTBF     },
+            { cloisterOfFlamesID.mob.IFRIT_PRIME_TSTBF + 1 },
+            { cloisterOfFlamesID.mob.IFRIT_PRIME_TSTBF + 2 },
         },
 
         allDeath = function(battlefield, mob)

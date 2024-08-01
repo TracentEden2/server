@@ -117,14 +117,14 @@ INSERT INTO `mob_skill_lists` VALUES ('Avatar-Garuda',37,871);
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Garuda',37,872);
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Garuda',37,873);
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Garuda',37,874);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,840);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,841);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,842);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,843);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,844);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,845);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,846);
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',38,847);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,840);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,841);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,842);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,843);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,844);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,845);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,846);
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_Misc',38,847);
 INSERT INTO `mob_skill_lists` VALUES ('Ixion_Melee',39,2341); -- di hoof attack
 INSERT INTO `mob_skill_lists` VALUES ('Ixion_Melee',39,2342); -- di horn attack
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Leviathan',40,858);
@@ -1437,10 +1437,11 @@ INSERT INTO `mob_skill_lists` VALUES ('Avatar-Titan',321,852); -- Waking the Bea
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Titan',321,853); -- Waking the Beast, earthern_ward
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Titan',321,856); -- Waking the Beast, geocrush
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Titan',321,857); -- Waking the Beast, earthen_fury
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',322,844); -- Waking the Beast, crimson_howl
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',322,846); -- Waking the Beast, flaming_crush
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',322,847); -- Waking the Beast, meteor_strike
-INSERT INTO `mob_skill_lists` VALUES ('Avatar-Ifrit',322,848); -- Waking the Beast, inferno
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_TBF',322,842); -- Trial By Fire, burning_strike
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_TBF',322,844); -- Trial By Fire, crimson_howl
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_TBF',322,845); -- Trial By Fire, fire_iv
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_TBF',322,846); -- Trial By Fire, flaming_crush
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_TBF',322,847); -- Trial By Fire, meteor_strike
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Leviathan',323,861); -- Waking the Beast, spring_water
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Leviathan',323,862); -- Waking the Beast, slowga
 INSERT INTO `mob_skill_lists` VALUES ('Avatar-Leviathan',323,864); -- Waking the Beast, spinning_dive
@@ -3894,8 +3895,12 @@ INSERT INTO `mob_skill_lists` VALUE ('Nantina',2011,1617); -- blow
 
 INSERT INTO `mob_skill_lists` VALUE ('Stcemqestcint',2012,1612); -- gouging_branch
 
--- Next available ID: 2008
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_WTB',2013,843); -- Waking the Beast, double punch
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_WTB',2013,844); -- Waking the Beast, crimson_howl
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_WTB',2013,845); -- Waking the Beast, fire iv
+INSERT INTO `mob_skill_lists` VALUES ('Avatar_Ifrit_WTB',2013,847); -- Waking the Beast, meteor_strike
 
+-- Next available ID: 2014
 -- ------------------------------------------------------------
 -- Start of Ambuscade section
 -- NOTE: The mobs are changed every update in the DATs, so using out-of-date

@@ -87,4 +87,5 @@ xi.mobMod =
     NO_WIDESCAN            = 76, -- Disables widescan for a specific mob
     TRUST_DISTANCE         = 77, -- TRUSTS ONLY: Set movement type/distance. See trust.lua for details.
     STANDBACK_RANGE        = 78, -- Applies a specific standback range for the mob
+    SKIP_ALLEGIANCE_CHECK  = 79, -- Skip the allegiance check for valid target (allows for example a mob to cast a TARGET_ENEMY spell on itself)
 }

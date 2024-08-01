@@ -1501,7 +1501,17 @@ bool CBattleEntity::ValidTarget(CBattleEntity* PInitiator, uint16 targetFlags)
             // PVE
             if (allegiance <= ALLEGIANCE_TYPE::PLAYER && PInitiator->allegiance <= ALLEGIANCE_TYPE::PLAYER)
             {
-                return allegiance != PInitiator->allegiance;
+                bool haveDiffAllegiances = allegiance != PInitiator->allegiance;
+
+                if (haveDiffAllegiances)
+                {
+                    return true;
+                }
+                // if seems like an invalid target due to allegiances then check for special mob mod
+                else if (auto* PMobInitiator = dynamic_cast<CMobEntity*>(PInitiator))
+                {
+                    return PMobInitiator->getMobMod(MOBMODIFIER::MOBMOD_SKIP_ALLEGIANCE_CHECK) == 1;
+                }
             }
 
             return false;

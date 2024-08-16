@@ -1117,6 +1117,7 @@ xi.item =
     SUMMONERS_BRACERS_M1                = 2105,
     SUMMONERS_SPATS_M1                  = 2106,
     SUMMONERS_PIGACHES_M1               = 2107,
+    MONARCHS_ORB                        = 2108,
     CHUNK_OF_ORPIMENT                   = 2126,
     METAL_CHIP                          = 2127,
     WAILING_RAM_HORN                    = 2142,

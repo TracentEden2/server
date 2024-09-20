@@ -20,10 +20,6 @@ local content = BattlefieldQuest:new({
     quest     = xi.quest.id.otherAreas.WAKING_THE_BEAST,
 })
 
-function content:onEventFinishWin(player, csid, option, npc)
-    npcUtil.giveKeyItem(player, xi.ki.EYE_OF_FLAMES)
-end
-
 content.groups =
 {
     {

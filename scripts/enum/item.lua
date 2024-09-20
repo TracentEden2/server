@@ -6562,6 +6562,7 @@ xi.item =
     GJALLARHORN_85                      = 18578,
     GJALLARHORN_90                      = 18579,
     GJALLARHORN_95                      = 18580,
+    CARBUNCLES_POLE                     = 18581,
     IMPERIAL_POLE                       = 18583,
     DRYAD_STAFF                         = 18587,
     PERDU_STAFF                         = 18588,

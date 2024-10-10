@@ -12,17 +12,25 @@ local ID = zones[xi.zone.CASTLE_OZTROJA]
 ---@type TNpcEntity
 local entity = {}
 
-local passwordTable =
+local IdToTextMapping =
 {
-    [0] = { [1] = { 15, 'Deggi' }, [2] = { 16, 'Haqa'  }, [3] = { 17, 'Mjuu' } },
-    [1] = { [1] = { 18, 'Puqu'  }, [2] = { 19, 'Ouzi'  }, [3] = { 20, 'Duzu' } },
-    [2] = { [1] = { 21, 'Gadu'  }, [2] = { 22, 'Mong'  }, [3] = { 23, 'Buxu' } },
-    [3] = { [1] = { 24, 'Xicu'  }, [2] = { 17, 'Mjuu'  }, [3] = { 21, 'Gadu' } },
-    [4] = { [1] = { 16, 'Haqa'  }, [2] = { 20, 'Duzu'  }, [3] = { 21, 'Gadu' } },
-    [5] = { [1] = { 21, 'Gadu'  }, [2] = { 18, 'Puqu'  }, [3] = { 22, 'Mong' } },
-    [6] = { [1] = { 21, 'Gadu'  }, [2] = { 23, 'Buxu'  }, [3] = { 20, 'Duzu' } },
-    [7] = { [1] = { 20, 'Duzu'  }, [2] = { 15, 'Deggi' }, [3] = { 19, 'Ouzi' } },
-    [8] = { [1] = { 17, 'Mjuu'  }, [2] = { 19, 'Ouzi'  }, [3] = { 23, 'Buxu' } },
+    [ID.text.DEGGI] = 'Deggi',
+    [ID.text.HAQA]  = 'Haqa',
+    [ID.text.MJUU]  = 'Mjuu',
+    [ID.text.PUQU]  = 'Puqu',
+    [ID.text.OUZI]  = 'Ouzi',
+    [ID.text.DUZU]  = 'Duzu',
+    [ID.text.GADU]  = 'Gadu',
+    [ID.text.MONG]  = 'Mong',
+    [ID.text.BUXU]  = 'Buxu',
+    [ID.text.XICU]  = 'Xicu',
+}
+
+local passwordLocalVarNames =
+{
+    'firstWord',
+    'secondWord',
+    'thirdWord',
 }
 
 entity.onTrade = function(player, npc, trade)
@@ -30,40 +38,63 @@ end
 
 entity.onTrigger = function(player, npc)
     local statue = npc:getID()
-    local passwordIndex = GetNPCByID(ID.npc.TRAP_DOOR_FLOOR_4):getLocalVar('password')
-    local password = passwordTable[passwordIndex]
 
-    if statue == ID.npc.FIRST_PASSWORD_STATUE then
-        player:messageSpecial(ID.text.FIRST_WORD)
-        player:messageSpecial(password[1][1])
-    elseif statue == ID.npc.SECOND_PASSWORD_STATUE then
-        player:messageSpecial(ID.text.SECOND_WORD)
-        player:messageSpecial(password[2][1])
-    elseif statue == ID.npc.THIRD_PASSWORD_STATUE then
-        player:messageSpecial(ID.text.THIRD_WORD)
-        player:messageSpecial(password[3][1])
-    elseif statue == ID.npc.FINAL_PASSWORD_STATUE then
-        player:startEvent(13)
+    local trapDoorFourthFloor = GetNPCByID(ID.npc.TRAP_DOOR_FLOOR_4)
+    if trapDoorFourthFloor then
+        local firstWordIndex = trapDoorFourthFloor:getLocalVar(passwordLocalVarNames[1])
+        local secondWordIndex = trapDoorFourthFloor:getLocalVar(passwordLocalVarNames[2])
+        local thirdWordIndex = trapDoorFourthFloor:getLocalVar(passwordLocalVarNames[3])
+
+        if statue == ID.npc.FIRST_PASSWORD_STATUE then
+            player:messageSpecial(ID.text.FIRST_WORD)
+            player:messageSpecial(firstWordIndex)
+        elseif statue == ID.npc.SECOND_PASSWORD_STATUE then
+            player:messageSpecial(ID.text.SECOND_WORD)
+            player:messageSpecial(secondWordIndex)
+        elseif statue == ID.npc.THIRD_PASSWORD_STATUE then
+            player:messageSpecial(ID.text.THIRD_WORD)
+            player:messageSpecial(thirdWordIndex)
+        elseif statue == ID.npc.FINAL_PASSWORD_STATUE then
+            player:startEvent(13)
+        end
     end
 end
 
 entity.onEventUpdate = function(player, csid, option, npc)
     local passwordGuess = player:getLocalVar('passwordGuess')
-    local passwordIndex = GetNPCByID(ID.npc.TRAP_DOOR_FLOOR_4):getLocalVar('password')
-    local password = passwordTable[passwordIndex]
 
-    if csid == 13 and option == password[1][2] and passwordGuess == 0 then
-        player:updateEvent(1)
-        player:setLocalVar('passwordGuess', 1)
-    elseif csid == 13 and option == password[2][2] and passwordGuess == 1 then
-        player:updateEvent(2)
-        player:setLocalVar('passwordGuess', 2)
-    elseif csid == 13 and option == password[3][2] and passwordGuess == 2 then
-        player:updateEvent(3)
-        player:setLocalVar('passwordGuess', 3)
-    else
-        player:messageSpecial(ID.text.INCORRECT)
-        player:setLocalVar('passwordGuess', 0)
+    local trapDoorFourthFloor = GetNPCByID(ID.npc.TRAP_DOOR_FLOOR_4)
+
+    if trapDoorFourthFloor then
+        local firstWordIndex = trapDoorFourthFloor:getLocalVar(passwordLocalVarNames[1])
+        local secondWordIndex = trapDoorFourthFloor:getLocalVar(passwordLocalVarNames[2])
+        local thirdWordIndex = trapDoorFourthFloor:getLocalVar(passwordLocalVarNames[3])
+
+        if
+            csid == 13 and
+            option == IdToTextMapping[firstWordIndex] and
+            passwordGuess == 0
+        then
+            player:updateEvent(1)
+            player:setLocalVar('passwordGuess', 1)
+        elseif
+            csid == 13 and
+            option == IdToTextMapping[secondWordIndex] and
+            passwordGuess == 1
+        then
+            player:updateEvent(2)
+            player:setLocalVar('passwordGuess', 2)
+        elseif
+            csid == 13 and
+            option == IdToTextMapping[thirdWordIndex] and
+            passwordGuess == 2
+        then
+            player:updateEvent(3)
+            player:setLocalVar('passwordGuess', 3)
+        else
+            player:messageSpecial(ID.text.INCORRECT)
+            player:setLocalVar('passwordGuess', 0)
+        end
     end
 end
 
@@ -71,7 +102,11 @@ entity.onEventFinish = function(player, csid, option, npc)
     local passwordGuess = player:getLocalVar('passwordGuess')
 
     if csid == 13 and passwordGuess == 3 then
-        GetNPCByID(ID.npc.TRAP_DOOR_FLOOR_4):openDoor(6)
+        local trapDoorFourthFloor = GetNPCByID(ID.npc.TRAP_DOOR_FLOOR_4)
+        if trapDoorFourthFloor then
+            trapDoorFourthFloor:openDoor(6)
+        end
+
         player:setLocalVar('passwordGuess', 0)
     end
 end

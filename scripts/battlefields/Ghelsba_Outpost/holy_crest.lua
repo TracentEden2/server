@@ -14,6 +14,7 @@ local content = BattlefieldQuest:new({
     index         = 1,
     area          = 1,
     entryNpc      = 'Hut_Door',
+    exitNpc       = 'qm1',
     questArea     = xi.questLog.SANDORIA,
     quest         = xi.quest.id.sandoria.THE_HOLY_CREST,
 })

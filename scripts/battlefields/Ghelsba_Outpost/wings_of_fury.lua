@@ -15,6 +15,7 @@ local content = Battlefield:new({
     index            = 2,
     area             = 1,
     entryNpc         = 'Hut_Door',
+    exitNpc          = 'qm1',
     requiredItems    = { xi.item.CLOUDY_ORB, wearMessage = ghelsbaID.text.A_CRACK_HAS_FORMED, wornMessage = ghelsbaID.text.ORB_IS_CRACKED },
     armouryCrates    =
     {

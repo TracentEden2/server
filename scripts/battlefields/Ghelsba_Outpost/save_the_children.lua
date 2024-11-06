@@ -18,6 +18,7 @@ local content = BattlefieldMission:new({
     index                 = 0,
     area                  = 1,
     entryNpc              = 'Hut_Door',
+    exitNpc               = 'qm1',
     missionArea           = xi.mission.log_id.SANDORIA,
     mission               = xi.mission.id.sandoria.SAVE_THE_CHILDREN,
     missionStatusArea     = xi.mission.log_id.SANDORIA,

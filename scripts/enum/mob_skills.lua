@@ -86,6 +86,8 @@ xi.mobSkill =
     RANGED_ATTACK_13  = 1213,
     RANGED_ATTACK_14  = 1214,
 
+    OPTIC_INDURATION  = 1465, -- used by JoT for example
+
     HOWLING_MOON_3    = 1520, -- Unknown usage.
 
     FOOT_KICK_2       = 1567,

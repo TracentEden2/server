@@ -8,98 +8,163 @@ mixins = { require('scripts/mixins/job_special') }
 ---@type TMobEntity
 local entity = {}
 
-entity.onMobSpawn = function(mob)
-    -- Set AnimationSub to 0, put it in pot form
-    -- Change it's damage resists. Pot for take
+local useOpticInduration = function(mob)
+    -- do not do any other attacks or abilities
+    -- between the pair of optic indurations
+    mob:setAutoAttackEnabled(false)
+    mob:setMobAbilityEnabled(false)
 
-    -- Change animation to pot
-    mob:setAnimationSub(0)
-    -- Set the damage resists
+    -- start the second optic induration a few seconds after the first
+    mob:timer(3000, function(mobArg)
+        if mobArg:isAlive() then
+            mobArg:useMobAbility(xi.mobSkill.OPTIC_INDURATION)
+        end
+    end)
+
+    -- set opticCounter back to 0 and set back to normal after the second optic induration
+    -- use a timer here so everything resets even if optic induration is interrupted
+    -- (cannot use onMobWeaponSkill because it is not called after an interruption)
+    mob:timer(6500, function(mobArg)
+        if mobArg:isAlive() then
+            mobArg:setLocalVar('opticCounter', 0)
+            mobArg:setAutoAttackEnabled(true)
+            mobArg:setMobAbilityEnabled(true)
+        end
+    end)
+end
+
+local changeToPot = function(mob)
     mob:setMod(xi.mod.HTH_SDT, 1000)
     mob:setMod(xi.mod.SLASH_SDT, 0)
     mob:setMod(xi.mod.PIERCE_SDT, 0)
     mob:setMod(xi.mod.IMPACT_SDT, 1000)
-    -- Set the magic resists. It always takes no damage from direct magic
-    for n = 1, #xi.magic.resistMod, 1 do
-        mob:setMod(xi.magic.resistMod[n], 0)
-    end
+end
 
-    for n = 1, #xi.magic.specificDmgTakenMod, 1 do
-        mob:setMod(xi.magic.specificDmgTakenMod[n], 10000)
-    end
+local changeToPoles = function(mob)
+    mob:setMod(xi.mod.HTH_SDT, 0)
+    mob:setMod(xi.mod.SLASH_SDT, 0)
+    mob:setMod(xi.mod.PIERCE_SDT, 1000)
+    mob:setMod(xi.mod.IMPACT_SDT, 0)
+end
+
+local changeToRings = function(mob)
+    mob:setMod(xi.mod.HTH_SDT, 0)
+    mob:setMod(xi.mod.SLASH_SDT, 1000)
+    mob:setMod(xi.mod.PIERCE_SDT, 0)
+    mob:setMod(xi.mod.IMPACT_SDT, 0)
+end
+
+-- animationSub for different forms: 1 = Pot, 2 = Poles, 3 = Rings
+-- table index is animationSub for current form and table entries for that index are
+-- valid forms to change into with the structure { newFormAnimationSub, newFormChangeFunction }
+local changeFormTable = {
+    [1] = { { 2, changeToPoles }, { 3, changeToRings } },
+    [2] = { { 1, changeToPot }, { 3, changeToRings } },
+    [3] = { { 1, changeToPot }, { 2, changeToPoles } },
+}
+
+-- list of all available forms so can randomly select from them at spawn
+local allFormTable = { { 1, changeToPot }, { 2, changeToPoles }, { 3, changeToRings } }
+
+entity.onMobSpawn = function(mob)
+    xi.mix.jobSpecial.config(mob, {
+        specials =
+        {
+            {
+                id = xi.jsa.MEIKYO_SHISUI,
+                hpp = math.random(65, 75),
+                endCode = function(mobArg)
+                    mobArg:setLocalVar('twoHour', 1)
+                end
+            },
+        },
+    })
+
+    -- select initial form at random
+    local initialForm = allFormTable[math.random(1, 3)]
+    mob:setAnimationSub(initialForm[1])
+    local changeFunction = initialForm[2]
+    changeFunction(mob)
+
+    -- always takes no damage from direct magic
+    mob:setMod(xi.mod.UDMGMAGIC, -10000)
+    -- confirmed on retail that breath damage does not work
+    mob:setMod(xi.mod.UDMGBREATH, -10000)
+    mob:setAutoAttackEnabled(true)
+    mob:setMobAbilityEnabled(true)
+    -- 50% ATT boost
+    mob:addMod(xi.mod.ATTP, 50)
+    -- 10 EVA boost
+    mob:addMod(xi.mod.EVA, 10)
+    -- -50 DEF penalty
+    mob:addMod(xi.mod.DEF, -50)
+    mob:addImmunity(xi.immunity.BIND)
+    mob:addImmunity(xi.immunity.STUN)
+    mob:addImmunity(xi.immunity.SILENCE)
+    mob:addImmunity(xi.immunity.PARALYZE)
+    mob:addImmunity(xi.immunity.BLIND)
+    mob:addImmunity(xi.immunity.SLOW)
+    mob:addImmunity(xi.immunity.ELEGY)
+    mob:addImmunity(xi.immunity.REQUIEM)
+    mob:addImmunity(xi.immunity.LIGHT_SLEEP)
+    mob:addImmunity(xi.immunity.DARK_SLEEP)
+    mob:addImmunity(xi.immunity.TERROR)
+    mob:setSpeed(60)
+end
+
+entity.onMobEngage = function(mob, target)
+    -- captures show the change time can range from 1 min to at least 6 mins
+    mob:setLocalVar('changeTime', os.time() + math.random(60, 360))
 end
 
 entity.onMobFight = function(mob)
-    -- Forms: 0 = Pot  1 = Pot  2 = Poles  3 = Rings
-    local randomTime = math.random(30, 180)
     local changeTime = mob:getLocalVar('changeTime')
+    local isBusy = false
 
-    -- If we're in a pot form, but going to change to either Rings/Poles
+    -- we do not want to change forms while charging optic induration
+    local act = mob:getCurrentAction()
     if
-        (mob:getAnimationSub() == 0 or mob:getAnimationSub() == 1) and
-        mob:getBattleTime() - changeTime > randomTime
+        act == xi.act.MOBABILITY_START or
+        act == xi.act.MOBABILITY_USING or
+        act == xi.act.MOBABILITY_FINISH or
+        mob:getLocalVar('opticCounter') == 1
     then
-        local aniChange = math.random(2, 3)
-        mob:setAnimationSub(aniChange)
+        isBusy = true
+    end
 
-        -- We changed to Poles. Make it only take piercing.
-        if aniChange == 2 then
-            mob:setMod(xi.mod.HTH_SDT, 0)
-            mob:setMod(xi.mod.SLASH_SDT, 0)
-            mob:setMod(xi.mod.PIERCE_SDT, 1000)
-            mob:setMod(xi.mod.IMPACT_SDT, 0)
-            mob:setLocalVar('changeTime', mob:getBattleTime())
-        else -- We changed to Rings. Make it only take slashing.
-            mob:setMod(xi.mod.HTH_SDT, 0)
-            mob:setMod(xi.mod.SLASH_SDT, 1000)
-            mob:setMod(xi.mod.PIERCE_SDT, 0)
-            mob:setMod(xi.mod.IMPACT_SDT, 0)
-            mob:setLocalVar('changeTime', mob:getBattleTime())
-        end
-    -- We're in poles, but changing
-    elseif
-        mob:getAnimationSub() == 2 and
-        mob:getBattleTime() - changeTime > randomTime
+    -- if time to change form and not busy
+    if
+        os.time() > changeTime and
+        not isBusy
     then
-        local aniChange = math.random(0, 1)
+        -- select a valid form to change into from current form
+        local changeTableEntry = changeFormTable[mob:getAnimationSub()][math.random(1, 2)]
 
-        -- Changing to Pot, only take Blunt damage
-        if aniChange == 0 then
-            mob:setAnimationSub(0)
-            mob:setMod(xi.mod.HTH_SDT, 1000)
-            mob:setMod(xi.mod.SLASH_SDT, 0)
-            mob:setMod(xi.mod.PIERCE_SDT, 0)
-            mob:setMod(xi.mod.IMPACT_SDT, 1000)
-            mob:setLocalVar('changeTime', mob:getBattleTime())
-        else -- Going to Rings, only take slashing
-            mob:setAnimationSub(3)
-            mob:setMod(xi.mod.HTH_SDT, 0)
-            mob:setMod(xi.mod.SLASH_SDT, 1000)
-            mob:setMod(xi.mod.PIERCE_SDT, 0)
-            mob:setMod(xi.mod.IMPACT_SDT, 0)
-            mob:setLocalVar('changeTime', mob:getBattleTime())
-        end
-    -- We're in rings, but going to change to pot or poles
-    elseif
-        mob:getAnimationSub() == 3 and
-        mob:getBattleTime() - changeTime > randomTime
-    then
-        local aniChange = math.random(0, 2)
-        mob:setAnimationSub(aniChange)
+        -- set the animation of the new form
+        mob:setAnimationSub(changeTableEntry[1])
+        local changeFunction = changeTableEntry[2]
+        -- call the function to set mods for the new form
+        changeFunction(mob)
+        -- captures show the change time can range from 1 min to at least 6 mins
+        mob:setLocalVar('changeTime', os.time() + math.random(60, 360))
+    end
 
-        -- We're changing to pot form, only take blunt damage.
-        if aniChange == 0 or aniChange == 1 then
-            mob:setMod(xi.mod.HTH_SDT, 1000)
-            mob:setMod(xi.mod.SLASH_SDT, 0)
-            mob:setMod(xi.mod.PIERCE_SDT, 0)
-            mob:setMod(xi.mod.IMPACT_SDT, 1000)
-            mob:setLocalVar('changeTime', mob:getBattleTime())
-        else -- Changing to poles, only take piercing
-            mob:setMod(xi.mod.HTH_SDT, 0)
-            mob:setMod(xi.mod.SLASH_SDT, 0)
-            mob:setMod(xi.mod.PIERCE_SDT, 1000)
-            mob:setMod(xi.mod.IMPACT_SDT, 0)
-            mob:setLocalVar('changeTime', mob:getBattleTime())
+    -- Jailer of Temperance uses second two hour around 40%
+    if mob:getHPP() < 40 and mob:getLocalVar('twoHour') == 1 then
+        mob:useMobAbility(xi.jsa.MEIKYO_SHISUI)
+        mob:setLocalVar('twoHour', 2)
+    end
+end
+
+entity.onMobWeaponSkill = function(target, mob, skill)
+    -- if just used optic induration
+    if skill:getID() == xi.mobSkill.OPTIC_INDURATION then
+        -- and it was the first optic induration of the pair
+        if mob:getLocalVar('opticCounter') == 0 then
+            -- increment counter
+            mob:setLocalVar('opticCounter', 1)
+            -- and start the logic for the second optic induration
+            useOpticInduration(mob)
         end
     end
 end

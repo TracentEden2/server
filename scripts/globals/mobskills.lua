@@ -576,34 +576,31 @@ xi.mobskills.mobPhysicalHit = function(skill)
 end
 
 xi.mobskills.mobDrainMove = function(mob, target, drainType, drain, attackType, damageType)
-    if not target:isUndead() then
-        if drainType == xi.mobskills.drainType.MP then
-            drain = math.min(drain, target:getMP())
+    if drainType == xi.mobskills.drainType.MP then
+        drain = math.min(drain, target:getMP())
 
-            target:delMP(drain)
-            mob:addMP(drain)
+        target:delMP(drain)
+        mob:addMP(drain)
 
-            return xi.msg.basic.SKILL_DRAIN_MP
-        elseif drainType == xi.mobskills.drainType.TP then
-            drain = math.min(drain, target:getTP())
+        return xi.msg.basic.SKILL_DRAIN_MP
+    elseif drainType == xi.mobskills.drainType.TP then
+        drain = math.min(drain, target:getTP())
 
-            target:delTP(drain)
-            mob:addTP(drain)
+        target:delTP(drain)
+        mob:addTP(drain)
 
-            return xi.msg.basic.SKILL_DRAIN_TP
-        elseif drainType == xi.mobskills.drainType.HP then
-            drain = math.min(drain, target:getHP())
-
-            target:takeDamage(drain, mob, attackType, damageType)
-            mob:addHP(drain)
-
-            return xi.msg.basic.SKILL_DRAIN_HP
-        end
-    else
+        return xi.msg.basic.SKILL_DRAIN_TP
+    elseif drainType == xi.mobskills.drainType.HP then
         drain = math.min(drain, target:getHP())
 
         target:takeDamage(drain, mob, attackType, damageType)
-        return xi.msg.basic.DAMAGE
+        -- if not undead then drain else just do damage
+        if not target:isUndead() then
+            mob:addHP(drain)
+            return xi.msg.basic.SKILL_DRAIN_HP
+        else
+            return xi.msg.basic.DAMAGE
+        end
     end
 
     return xi.msg.basic.SKILL_NO_EFFECT

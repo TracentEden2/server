@@ -12634,9 +12634,9 @@ INSERT INTO `mob_groups` VALUES (34,709,190,'Cherry_Sapling',0,128,462,0,0,62,64
 INSERT INTO `mob_groups` VALUES (35,671,190,'Cemetery_Cherry',0,128,442,40000,10000,72,73,0);
 INSERT INTO `mob_groups` VALUES (36,244,190,'Locus_Armet_Beetle',330,0,670,302500,0,134,136,0);
 INSERT INTO `mob_groups` VALUES (37,4261,190,'Vrtra',0,128,2592,100000,100000,95,95,0);
-INSERT INTO `mob_groups` VALUES (38,3124,190,'Pey',0,128,0,0,0,76,76,0);
-INSERT INTO `mob_groups` VALUES (39,2105,190,'Iruci',0,128,0,0,0,76,76,0);
-INSERT INTO `mob_groups` VALUES (40,70,190,'Airi',0,128,0,0,0,81,81,0);
+INSERT INTO `mob_groups` VALUES (38,3124,190,'Pey',0,128,0,0,0,80,82,0);
+INSERT INTO `mob_groups` VALUES (39,2105,190,'Iruci',0,128,0,0,0,80,82,0);
+INSERT INTO `mob_groups` VALUES (40,70,190,'Airi',0,128,0,0,0,80,82,0);
 INSERT INTO `mob_groups` VALUES (41,799,190,'Corrupted_Yorgos',0,128,0,7250,0,64,64,0);
 INSERT INTO `mob_groups` VALUES (42,797,190,'Corrupted_Soffeil',0,128,0,0,0,63,63,0);
 INSERT INTO `mob_groups` VALUES (43,798,190,'Corrupted_Ulbrig',0,128,0,0,0,63,63,0);

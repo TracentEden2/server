@@ -142,7 +142,6 @@ entity.onMobFight = function(mob, target)
         mob:canUseAbilities()
     then
         mob:useMobAbility(710)
-        mob:setLocalVar('skill_tp', mob:getTP()) -- 2 hr shouldn't wipe TP
         mob:setLocalVar('twohourTime', fifteenBlock + math.random(4, 6))
     elseif fifteenBlock > spawnTime then
         local mobId     = mob:getID()
@@ -184,14 +183,6 @@ entity.onMobFight = function(mob, target)
         utils.drawIn(target, drawInTable)
     else
         mob:setMobMod(xi.mobMod.NO_MOVE, 0)
-    end
-end
-
-entity.onMobWeaponSkill = function(target, mob, skill)
-    -- Don't lose TP from charm 2hr
-    if skill:getID() == 710 then
-        mob:addTP(mob:getLocalVar('skill_tp'))
-        mob:setLocalVar('skill_tp', 0)
     end
 end
 
